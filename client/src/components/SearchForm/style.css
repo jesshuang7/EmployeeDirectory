@@ -1,0 +1,12 @@
+form.search {
+  /* overflow: auto; */
+  margin-bottom: 50px;
+  width:25%;
+}
+
+/* form.search button[type="submit"] {
+  float: right;
+  margin-top: 10px;
+  margin-left: -40px; 
+  z-index: 100;
+} */
