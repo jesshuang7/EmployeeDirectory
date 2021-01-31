@@ -2,54 +2,136 @@ import React, { Component } from "react";
 import API from "../utils/API";
 import Container from "../components/Container";
 import SearchForm from "../components/SearchForm";
-// import SearchResults from "../components/SearchResults";
 import Hero from "../components/Hero";
 import Table from "../components/Table";
 
 
+  
 class Search extends Component {
     state = {
         employees: [],
-        search: ""
+        search: "", 
+        filteredList: [], 
+        sortingOrder: "descending"
     };
 
     componentDidMount() {
         API.getRandomEmployee()
             // .then(res => console.log(res)) 
-            .then(res => this.setState({ employees: res.data.results }))
+            .then(res => this.setState({ 
+                employees: res.data.results, 
+                filteredList: res.data.results, 
+                sortingEmployees: res.data.results }))
             .catch(err => console.log(err));
     }
 
     handleInputChange = event => {
         this.setState({ search: event.target.value });
+        // this.searchEmployee();
         this.searchEmployee(this.state.search);
     };
 
-    searchEmployee = (filter) => {
-        console.log('Search', filter);
+    searchEmployee = (value) => {
+        console.log('Search', value);
         const filteredList = this.state.employees.filter((employee) => {
-          // merge data together, then check to see if employee exists
-          let values = Object.values(employee).join('').toLowerCase();
-          return values.indexOf(filter.toLowerCase()) !== -1;
-        });
-        // Update the employee list with the filtered value
-        this.setState({ employees: filteredList });
+            // merge data together, then check to see if employee exists
+             return (employee.name.first + "" + employee.name.last).toLowerCase().includes(value.toLowerCase())
+          });
+              // Update the employee list with the filtered value
+              this.setState({ filteredList: filteredList });
+              console.log(filteredList);
       };
 
-    handleFormSubmit = event => {
-        event.preventDefault();
-        console.log("handleFormSubmit", this.state.search, event);
-        this.searchEmployee(this.state.search);
-        // API.getDogsOfBreed(this.state.search)
-        //   .then(res => {
-        //     if (res.data.status === "error") {
-        //       throw new Error(res.data.message);
-        //     }
-        //     this.setState({ results: res.data.message, error: "" });
-        //   })
-        //   .catch(err => this.setState({ error: err.message }));
-    };
+      onSortChange = () => {
+        this.setState({
+          employees: this.state.sortingOrder
+            ? this.state.employees.sort((a, b) => {
+            if (a.name.last < b.name.last) return -1;
+            if (a.name.last > b.name.last) return 1;
+            return 0;
+        })
+            : this.state.employees.reverse((a, b) => {
+            if (a.name.last < b.name.last) return 1;
+            if (a.name.last > b.name.last) return -1;
+            return 0;
+        }),
+          sortingOrder: !this.state.sortingOrder,
+        });
+    }
+
+    //   sortResults = (event) => {
+    //       const results = this.state.employees
+    //         if (this.state.sortingOrder === "descending") {
+    //             results.sort((a, b) => {
+    //                 if (a.name.last < b.name.last) {
+    //                     return -1;
+    //                 }
+    //                 return a.name.last < b.name.last ? 1 : 0
+    //             }, 
+    //             this.setState({sortingOrder: "ascending"}))
+    //         } else if (this.state.sortingOrder === "ascending") {
+    //             results.sort((a, b) => {
+    //                 if (a.name.last > b.name.last) {
+    //                     return -1
+    //                 }
+    //                 return a.name.last > b.name.last ? 1 : 0
+    //             }, 
+    //             this.setState({ sortOrder: "descending" }))
+    //         }
+    
+    //         console.log("RESULTS: ", results)
+    
+    //         this.setState({
+    //             sortedResults: results,
+    //             isSorted: true
+    //         })
+    // }
+
+    // sortingFunc(props) {
+    //     console.log("In sorting Func");
+    //     console.log(props.employees);
+    //     console.log(props.sortingOrder);
+    //     let sortedArr = [...props.employees]
+    //     let originalData = [...props.employees]
+    //     // console.log("In Sorted Arr");
+    //     if (props.sortingOrder === "descending") {
+    //         this.setState({ sortingOrder: "ascending" });
+    //         console.log("ascending")
+    //         console.log(sortedArr.sort((a, b) => (a.name.first > b.name.first) ? 1 : -1));
+    //         originalData.sort((a, b) => (a.name.first > b.name.first) ? 1 : -1);
+    //         this.setState({ employees: originalData, filteredList: sortedArr });
+    //     } else if (props.sortingOrder === "ascending") {
+    //         this.setState({ sortingOrder: "descending" });
+    //         console.log("descending")
+    //         console.log(sortedArr.sort((a, b) => (a.name.first > b.name.first) ? -1 : 1));
+    //         originalData.sort((a, b) => (a.name.first > b.name.first) ? -1 : 1);
+    //         this.setState({ employees: originalData, filteredList: sortedArr });
+    //     } else {
+    //         this.setState({ sortingOrder: "ascending" });
+    //         console.log("ascending")
+    //         console.log(sortedArr.sort((a, b) => (a.name.first > b.name.first) ? 1 : -1));
+    //         originalData.sort((a, b) => (a.name.first > b.name.first) ? 1 : -1);
+    //         this.setState({ employees: originalData, filteredList: sortedArr });
+    //     }
+    // }
+      
+
+    // handleFormSubmit = event => {
+    //     event.preventDefault();
+    //     console.log("handleFormSubmit", this.state.search, event);
+    //     this.searchEmployee(this.state.search);
+    //     // API.getDogsOfBreed(this.state.search)
+    //     //   .then(res => {
+    //     //     if (res.data.status === "error") {
+    //     //       throw new Error(res.data.message);
+    //     //     }
+    //     //     this.setState({ results: res.data.message, error: "" });
+    //     //   })
+    //     //   .catch(err => this.setState({ error: err.message }));
+    // };
     render() {
+
+
         return (
             <div>
                 <Hero>
@@ -59,30 +141,14 @@ class Search extends Component {
                 <Container style={{ minHeight: "80%" }}>
                     <h1 className="text-center"></h1>
                     <SearchForm
-                        handleFormSubmit={this.handleFormSubmit}
+                        // handleFormSubmit={this.handleFormSubmit}
                         handleInputChange={this.handleInputChange}
                     />
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Image</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Phone</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">DOB</th>
-                            </tr>
-                        </thead>
-                        {[...this.state.employees].map((item) => (
-                            <Table
-                                picture={item.picture.medium}
-                                firstName={item.name.first}
-                                lastName={item.name.last}
-                                email={item.email}
-                                phone={item.phone}
-                                dob={item.dob.date}
-                            />
-                        ))}
-                    </table>
+                    {/* <TableHeader></TableHeader> */}
+                 <Table 
+                    filteredList = {this.state.filteredList}
+                    onSortChange = {this.state.onSortChange}
+                 />
                     {/* <SearchResults results={this.state.employees} /> */}
                 </Container>
             </div>
