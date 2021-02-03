@@ -12,7 +12,7 @@ class Search extends Component {
         employees: [],
         search: "", 
         filteredList: [], 
-        sortingOrder: "descending"
+        sortingOrder: ""
     };
 
     componentDidMount() {
@@ -59,34 +59,6 @@ class Search extends Component {
         });
     }
 
-    //   sortResults = (event) => {
-    //       const results = this.state.employees
-    //         if (this.state.sortingOrder === "descending") {
-    //             results.sort((a, b) => {
-    //                 if (a.name.last < b.name.last) {
-    //                     return -1;
-    //                 }
-    //                 return a.name.last < b.name.last ? 1 : 0
-    //             }, 
-    //             this.setState({sortingOrder: "ascending"}))
-    //         } else if (this.state.sortingOrder === "ascending") {
-    //             results.sort((a, b) => {
-    //                 if (a.name.last > b.name.last) {
-    //                     return -1
-    //                 }
-    //                 return a.name.last > b.name.last ? 1 : 0
-    //             }, 
-    //             this.setState({ sortOrder: "descending" }))
-    //         }
-    
-    //         console.log("RESULTS: ", results)
-    
-    //         this.setState({
-    //             sortedResults: results,
-    //             isSorted: true
-    //         })
-    // }
-
     // sortingFunc(props) {
     //     console.log("In sorting Func");
     //     console.log(props.employees);
@@ -115,23 +87,7 @@ class Search extends Component {
     //     }
     // }
       
-
-    // handleFormSubmit = event => {
-    //     event.preventDefault();
-    //     console.log("handleFormSubmit", this.state.search, event);
-    //     this.searchEmployee(this.state.search);
-    //     // API.getDogsOfBreed(this.state.search)
-    //     //   .then(res => {
-    //     //     if (res.data.status === "error") {
-    //     //       throw new Error(res.data.message);
-    //     //     }
-    //     //     this.setState({ results: res.data.message, error: "" });
-    //     //   })
-    //     //   .catch(err => this.setState({ error: err.message }));
-    // };
     render() {
-
-
         return (
             <div>
                 <Hero>
@@ -147,7 +103,7 @@ class Search extends Component {
                     {/* <TableHeader></TableHeader> */}
                  <Table 
                     filteredList = {this.state.filteredList}
-                    onSortChange = {this.state.onSortChange}
+                    onSortChange = {this.onSortChange}
                  />
                     {/* <SearchResults results={this.state.employees} /> */}
                 </Container>
