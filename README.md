@@ -1,5 +1,6 @@
 # EmployeeDirectory
 Explore the [Project Page](https://github.com/jesshuang7/EmployeeDirectory)
+
 View the [Github-pages](https://jesshuang7.github.io/EmployeeDirectory/)
 
 
